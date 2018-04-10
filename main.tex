@@ -1,0 +1,100 @@
+\documentclass{article}
+
+\usepackage{cite}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subcaption} % Allows the use of subfigures and enables their referencing.
+\usepackage[hidelinks]{hyperref}
+\usepackage[acronym,toc,shortcuts]{glossaries}
+\usepackage{amsfonts}
+
+\begin{document}
+
+
+\sloppy
+\input{titlepage}
+
+\textbf{Notation}: If we write \[ v \in [k,n] \] and $v$ is obviously supposed to be integer, we actually mean \[v \in \{v \in \mathbb{N} \mid k \leq v \leq n\}\]. It is just more convenient to write the former.
+
+\section{Network Design}
+
+\subsection{Variables}
+\begin{itemize}
+	\item $x^1_{ij}$ : Decision variable to determine wheter to establish a link of type $d^1_{ij}$ on the arc from node $i$ to node $j$ or not
+	\item $x^2_{ij}$ : Decision variable to determine wheter to establish a link of type $d^2_{ij}$ on the arc from node $i$ to node $j$ or not
+	\item $f_{ij}$ : Variable that indicates the flow from node $i$ to node $j$
+\end{itemize}
+
+\subsection{Constraints}
+\[ \sum_{i\in V}b_i = 0 \]
+\[ \forall i \in V : \sum_{j\in V}f_{ij} - \sum_{j\in V}f_{ji} = b_i  \]
+\[ \forall (i,j) \in A : f_{ij} \leq x^1_{ij}u^1_{ij} + x^2_{ij}u^2_{ij}  \]
+\[ \forall (i,j) \in A : x^1_{ij} + x^2_{ij} < 2 \]
+\[ \forall (i,j) \notin A : f_{ij} = 0  \]
+\[ \forall (i,j) \in A : f_{ij} \geq 0 \]
+\[ \forall (i,j) \in A : x^1_{ij} \in \{0,1\} \wedge x^2_{ij} \in \{0,1\} \]
+\[ \forall (i,j) \notin A : x^1_{ij} = 0 \wedge x^2_{ij} = 0 \]
+
+\subsection{Optimization}
+
+\[ min \sum_{i\in V}\sum_{j\in V}f_{ij}c_{ij} + x^1_{ij}d^1_{ij} + x^2_{ij}d^2_{ij} \]
+
+\clearpage
+
+\section{Job Shop Scheduling}
+
+\subsection{Variables}
+\begin{itemize}
+	\item $t^s_{ij}$ : Starting time of task $j$ on machine $i$ 
+	\item $t^f_{ij}$ : Finishing time of task $j$ on machine $i$ (this variable is not realy needed, but adds to readability)
+	\item $y_{ij_1j_2}$ : Decision variable that is set to one if job $j_1$ is executed before $j_2$ on machine $i$ and to zero otherwise
+	\item $K$ : Large constant used to force constraint to true if needed 
+\end{itemize}
+
+\subsection{Constraints}
+\[ \forall i \in [1,m] : \forall j \in [1,n] : t^f_{ij} = t^s_{ij} + p_{ij} \]
+\[ \forall i \in [1,m-1] : \forall j \in [1,n] : t^s_{j(i+1)j} > t^f_{j(i)j}  \]
+\[ \forall i \in [1,m] : \forall j_1 \in [1,n] : \forall j_2 \in [1,n] : t^s_{ij_1} \geq t^f_{ij_2} - K*y_{ij_1j_2} \]
+\[ \forall i \in [1,m] : \forall j_1 \in [1,n] : \forall j_2 \in [1,n] : t^s_{ij_2} \geq t^f_{ij_1} - K*(1 - y_{ij_1j_2}) \]
+\[ \forall i \in [1,m] : \forall j \in [1,n] : t^f_{ij} \geq t^s_{ij} \geq 0 \]
+\[ \forall i \in [1,m] : \forall j \in [1,n] : t^s_{ij} \leq K \]
+
+\subsection{Optimization}
+
+\[ min \sum^n_{j=1} t^f_{j(m)j} \]
+
+\subsection{Reference}
+
+We used this paper (\cite{job_shop_scheduling_pedro}) as reference
+
+\section{Sports League}
+\subsection{Variables}
+\begin{itemize}
+	\item $x^1_{g}$ : Decision variable that is true if a draw took place in game $g$ and false otherwise 
+	\item $x^2_{g}$ : Decision variable that is true if the first team won in game $g$ and false otherwise 
+	\item $x^3_{g}$ : Decision variable that is true if the second team won in game $g$ and false otherwise
+	\item $p_{t}$ : Amount of points of the team on rank $t$
+\end{itemize}
+
+\subsection{Constraints}
+\[ G = \{(t_1,t_2) : t_1 \in [1,n] \wedge t_2 \in [1,n]\} \]
+\[ \forall g \in G : x^1_g + x^2_g + x^3_g = 1 \]
+\[ \sum_{g \in G : g=(t,t')} 3x^2_g+x^1_g + \sum_{g \in G : g=(t',t)} 3x^3_g+x^1_g = p_t \]
+\[ \forall t \in [1,n-1] : p_{t+1} \leq p_t \]
+\[ \forall i \in \{0,1,2\} : \forall g \in G : x^i_g \in \{0,1\} \]
+
+\subsection{Optimization}
+
+\[ max\quad p_{n-k} \]
+
+\subsection{Reference}
+
+We used this paper (\cite{integer_programming_sports_ranking}) as reference
+\clearpage
+
+\bibliography{bibdata} 
+\bibliographystyle{ieeetr}
+
+\end{document}
+
+
