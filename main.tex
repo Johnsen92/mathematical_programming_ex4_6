@@ -7,6 +7,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[acronym,toc,shortcuts]{glossaries}
 \usepackage{amsfonts}
+\setcounter{section}{3}
 
 \begin{document}
 
@@ -14,11 +15,53 @@
 \sloppy
 \input{titlepage}
 
-\textbf{Notation}: If we write \[ v \in [k,n] \] and $v$ is obviously supposed to be integer, we actually mean \[v \in \{v \in \mathbb{N} \mid k \leq v \leq n\}\]. It is just more convenient to write the former.
+\textbf{Notation}: If we write $ v \in [k,n] $ and $v$ is obviously supposed to be integer, we actually mean $v \in \{v \in \mathbb{N} \mid k \leq v \leq n\}$. It is just more convenient to write the former.
 
 \section{Cycle-Elimination Cuts}
 
+\clearpage
+
 \section{(Prize Collecting) Steiner Tree Problem}
+
+\subsection{STP}
+
+\subsubsection{Variables}
+\begin{itemize}
+	\item $x_e$ : Variable that represents edge $e \in E$ in the sense that it is the sum of selected arcs between node $i$ and node $j$ where $(i,j) = e$ 
+	\item $y_ij$ : Decision variable to determine whether to include an arc or not
+\end{itemize}
+
+\subsubsection{Constraints}
+\[ \sum_{(i,j)\in A}y_{ij} = n-1 \]
+\[ \forall W \subset V, r \in W, (V \setminus W) \cap T \neq \emptyset : \sum_{(i,j)\in \delta^+(W)}y_{ij} \geq 1 \]
+\[ \forall e \in E : x_e \geq 0 \]
+\[ \forall e = \{i,j\} \in E : y_{ij} + y_{ji} = x_e \]
+\[ \forall (i,j) \in A : y_{i,j} \in \{0,1\} \]
+
+\subsubsection{Optimization}
+\[ min \sum_{e\in E}w_ex_e \]
+
+\subsubsection{Reference}
+We used this paper (\cite{solving_steiner_tree_problems}) as reference
+
+\subsection{PCSTP}
+
+\subsubsection{Variables}
+\begin{itemize}
+	\item $x_e$ : Variable that represents edge $e \in E$ in the sense that it is the sum of selected arcs between node $i$ and node $j$ where $(i,j) = e$ 
+	\item $y_ij$ : Decision variable to determine whether to include an arc or not
+\end{itemize}
+
+\subsubsection{Constraints}
+\[ \sum_{(i,j)\in A}y_{ij} = n-1 \]
+
+\subsubsection{Optimization}
+\[ min \sum_{e\in E}w_ex_e \]
+
+\subsubsection{Reference}
+We used this paper (\cite{prize_collecting_steiner_tree_problem}) as reference
+
+\clearpage
 
 \section{Network Design}
 
@@ -30,8 +73,9 @@
 
 \subsection{Constraints}
 \[ \sum_{e\in E}x_e = r-1 \]
-\[ \forall j \in [1,r] : \sum_{i\in V_i}z_i = 1 \]
+\[ \forall j \in [1,r] : \sum_{i\in V_j}z_i = 1 \]
 \[ \sum_{e\in E}x_e = \sum_{i\in V}z_i - 1 \]
+\[ \forall U \subset V, k \in U : \sum_{e\in E(U)}x_e \leq \sum_{i\in U \setminus \{k\}}z_i \]
 \[ \forall e \in E : x_e \in \{0,1\} \]
 \[ \forall i \in V : z_i \in \{0,1\} \]
 
