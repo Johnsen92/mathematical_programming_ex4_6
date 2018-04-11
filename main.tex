@@ -19,6 +19,8 @@
 
 \section{Cycle-Elimination Cuts}
 
+We prove that $P_{cec} = P_{sub}$, in order to do so, it is enough to prove $P_{cec} \subseteq P_{sub}$, since the other directory was already prove in the slides. By looking at the subtour elimination constrains, we notice that $\sum_{e \in E(S)} \leq \vert{S} - 1$ is violated iff $S$ contains at least one cycle (assuming we work with simple graphs without multiedges). Hence, such a subset would also violate the cycle elimination constraint. It follows that $\bar{P_{sub}} \subseteq \bar{P_{cec}}$ and therefore also $P_{cec} \subseteq P_{sub}$.
+
 \clearpage
 
 \section{(Prize Collecting) Steiner Tree Problem}
