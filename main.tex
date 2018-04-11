@@ -19,7 +19,7 @@
 
 \section{Cycle-Elimination Cuts}
 
-We prove that $P_{cec} = P_{sub}$, in order to do so, it is enough to prove $P_{cec} \subseteq P_{sub}$, since the other directory was already prove in the slides. By looking at the subtour elimination constrains, we notice that $\sum_{e \in E(S)} \leq \vert{S} - 1$ is violated iff $S$ contains at least one cycle (assuming we work with simple graphs without multiedges). Hence, such a subset would also violate the cycle elimination constraint. It follows that $\bar{P_{sub}} \subseteq \bar{P_{cec}}$ and therefore also $P_{cec} \subseteq P_{sub}$.
+We prove that $P_{cec} = P_{sub}$, in order to do so, it is enough to prove $P_{cec} \subseteq P_{sub}$, since the other directory was already proven in the slides. By looking at the subtour elimination constrains, we notice that $\sum_{e \in E(S)} \leq \vert{S} - 1$ is violated iff $S$ contains at least one cycle (assuming we work with simple graphs without multiedges). Hence, such a subset would also violate the cycle elimination constraint. It follows that $\bar{P_{sub}} \subseteq \bar{P_{cec}}$ and therefore also $P_{cec} \subseteq P_{sub}$.
 
 \clearpage
 
@@ -38,7 +38,7 @@ We prove that $P_{cec} = P_{sub}$, in order to do so, it is enough to prove $P_{
 \[ \forall W \subset V, r \in W, (V \setminus W) \cap T \neq \emptyset : \sum_{(i,j)\in \delta^+(W)}y_{ij} \geq 1 \]
 \[ \forall e \in E : x_e \geq 0 \]
 \[ \forall e = \{i,j\} \in E : y_{ij} + y_{ji} = x_e \]
-\[ \forall (i,j) \in A : y_{i,j} \in \{0,1\} \]
+\[ \forall (i,j) \in A : y_{ij} \in \{0,1\} \]
 
 \subsubsection{Optimization}
 \[ min \sum_{e\in E}w_ex_e \]
@@ -50,15 +50,33 @@ We used this paper (\cite{solving_steiner_tree_problems}) as reference
 
 \subsubsection{Variables}
 \begin{itemize}
-	\item $x_e$ : Variable that represents edge $e \in E$ in the sense that it is the sum of selected arcs between node $i$ and node $j$ where $(i,j) = e$ 
+	\item $x_ej$ : Variable that represents edge $e \in E$ in the sense that it is the sum of selected arcs between node $i$ and node $j$ where $(i,j) = e$ 
 	\item $y_ij$ : Decision variable to determine whether to include an arc or not
+	\item $z_i$ : Decision variable to determine whether to include a node or not
 \end{itemize}
 
+\subsubsection{Notation}
+\begin{itemize}
+	\item $T_p$ : Set of potential terminal nodes: only nodes with revenues
+	$p_i \ge 0$ such that at least one adjacent edge is strictly cheaper than $p_i$
+	\item $T_r$ : Set of required terminal nodes
+	\item $T = T_r + T_p$
+\end{itemize}
+
+
 \subsubsection{Constraints}
-\[ \sum_{(i,j)\in A}y_{ij} = n-1 \]
+
+\[ \forall W \subset V, r \notin W, \forall i \in W \cap T : \sum_{(j,k)\in \delta^-(W):k=i}y_{jk} \geq z_i \]
+\[ \forall i \in T : \sum_{(j,k)\in A:k=i}y_{jk} = z_i \]
+\[ \forall i \in T_r : z_i = 1 \]
+\[ \forall i \in T_p : z_i \in \{0,1\} \]
+\[ \forall e \in E : x_e \geq 0 \]
+\[ \forall e = \{i,j\} \in E : y_{ij} + y_{ji} = x_e \]
+\[ \forall (i,j) \in A : y_{ij} \in \{0,1\} \]
+
 
 \subsubsection{Optimization}
-\[ min \sum_{e\in E}w_ex_e \]
+\[ max \sum_{i\in V}z_ip_i - \sum_{e\in E}w_ex_e \]
 
 \subsubsection{Reference}
 We used this paper (\cite{prize_collecting_steiner_tree_problem}) as reference
